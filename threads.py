@@ -94,7 +94,7 @@ class VideoDownloadThread(QtCore.QThread):
         self.format_string = format_string
         print('video download thread inited')
 
-    def run(self):
+    def run(self):  # t.start()
         try:
             self.dl.download(on_progress=self.download_progress.emit,
                              path=self.save_path,

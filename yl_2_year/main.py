@@ -11,7 +11,7 @@ dl_options = {'verbose': True}
 # https://www.youtube.com/watch?v=LXb3EKWsInQ
 
 with YoutubeDL(dl_options) as ydl:
-    meta = ydl.extract_info('https://www.youtube.com/watch?v=BXF3SCuewJA',
+    meta = ydl.extract_info('https://twitter.com/PPathole/status/1455785718043734024',
                             download=False)
     pprint(meta)
     # ydl.download(['https://www.youtube.com/watch?v=BXF3SCuewJA'])

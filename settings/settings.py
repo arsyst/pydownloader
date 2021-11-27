@@ -10,9 +10,6 @@ APP_ICON_PATH = 'images/icon.png'
 # Путь до файла базы данных
 DB_PATH = 'db/db.sqlite'
 
-# Ширина скроллбара - для отладки
-# SCROLLBAR_WIDTH = 30
-
 # Таймаут работы потоков скачивания информации о видеоролике и превью (в милисекундах)
 THREAD_WORKING_TIMEOUT = 16000
 
