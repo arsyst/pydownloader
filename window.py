@@ -197,7 +197,7 @@ class MainAppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         dialog = VideoDownloadDialog(videos_dicts, self.save_dir)
 
         dialog.exec()
-        remaining_videos = dialog.get_remaining_videos()
+        # remaining_videos = dialog.get_remaining_videos()
         self.table_model.removeRows(0, self.table_model.rowCount())
         self.db.delete_all_table_videos()
 

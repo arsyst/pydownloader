@@ -79,7 +79,7 @@ class VideoDownloadThread(QtCore.QThread):
         format_string: Идентификатор формата.
     """
 
-    error_raised = QtCore.pyqtSignal(str)
+    error_raised = QtCore.pyqtSignal(Exception)
     downloaded = QtCore.pyqtSignal()
     download_progress = QtCore.pyqtSignal(int, int, str)
 
@@ -96,10 +96,11 @@ class VideoDownloadThread(QtCore.QThread):
 
     def run(self):  # t.start()
         try:
+            self.msleep(5000)  # Для избежания отказа в доступе к видеоролику со стороны интернет-сервиса
             self.dl.download(on_progress=self.download_progress.emit,
                              path=self.save_path,
                              download_format=self.format_string)
         except Exception as err:
-            self.error_raised.emit()
+            self.error_raised.emit(err)
         else:
             self.downloaded.emit()

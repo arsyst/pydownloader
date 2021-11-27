@@ -310,7 +310,7 @@ class VideoDownloadDialog(QtWidgets.QDialog, Ui_VideoDownloadDialog):
         }
 
         # Настройка QPushButton
-        self.pause_button.setEnabled(False)
+        self.pause_button.hide()  # TODO: доделать приостановку скачивания
         self.stop_button.clicked.connect(self.stop_clicked)
 
         self.download_video()
@@ -383,7 +383,7 @@ class VideoDownloadDialog(QtWidgets.QDialog, Ui_VideoDownloadDialog):
     def display_download_progress(self, total_bytes: int,
                                   downloaded_bytes: int, status: str):
         if status == 'error':
-            self.download_video_thread_error()
+            self.download_video_thread_error(OtherError(Exception('status "error" while downloading')))
 
         self.progress_bar.setValue(int(downloaded_bytes / total_bytes * 100))
         self.set_dl_status(downloaded=human_size(downloaded_bytes))
@@ -423,8 +423,8 @@ class VideoDownloadDialog(QtWidgets.QDialog, Ui_VideoDownloadDialog):
 
         self.download_video()
 
-    def download_video_thread_error(self):
-        self._logger.debug(f'Error while downloading')
+    def download_video_thread_error(self, err: Exception):
+        self._logger.error(f'Error while video {self.current_video_index} downloading: {err.__repr__()}')
         self.problem_videos.insert(0, self.videos.pop(0))
         self.download_video()
 
@@ -437,7 +437,10 @@ class VideoDownloadDialog(QtWidgets.QDialog, Ui_VideoDownloadDialog):
                       ind, total_videos, downloaded, total_bytes, status.
         """
         self.status_params.update(kwargs)
-        self.status_label.setText(s.DOWNLOAD_STATUS_TEMPLATE.format(**self.status_params))
+        if self.status_params.get('total_bytes', None) is None:
+            self.status_label.setText(s.DOWNLOAD_STATUS_TEMPLATE_WITHOUT_BYTES.format(**self.status_params))
+        else:
+            self.status_label.setText(s.DOWNLOAD_STATUS_TEMPLATE.format(**self.status_params))
 
     def report_error(self, msg: str) -> None:
         """

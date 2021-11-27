@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox, QCheckBox
+from typing import Optional
 
 import settings.settings as s
 
@@ -16,7 +17,7 @@ __all__ = (
 )
 
 
-def human_size(bytes_size: int) -> str:
+def human_size(bytes_size: Optional[int]) -> Optional[str]:
     """
     Преобразует количество байтов в читаемый для пользователя вид (108МБ, 912КБ и т.д.)
 
@@ -26,10 +27,13 @@ def human_size(bytes_size: int) -> str:
     Returns:
         Строка, содержащая читаемое для человека значение объема информации.
     """
+    if bytes_size is None:  # Необходимо для корректной работы кода при аргумете равном None
+        return None
+
     suffix = 'Б'
     for unit in ['', 'К', 'М', 'Г', 'Т', 'П', 'Е', 'З']:
         if abs(bytes_size) < 1024.0:
-            return f"{bytes_size:3.1f}{unit}{suffix}"
+            return f"{bytes_size:.1f}{unit}{suffix}"
         bytes_size /= 1024.0
     return f"{bytes_size:.1f}И{suffix}"
 
@@ -150,7 +154,7 @@ def get_audio_video_formats(formats: list[dict]) -> list[dict]:
         Список "аудио и видео" форматов
     """
     audio_video_formats = list(filter(
-        lambda f: f['vcodec'] != 'none',
+        lambda f: f['vcodec'] != 'none' and f['acodec'] != 'none',
         formats
     ))
     return audio_video_formats
@@ -203,6 +207,14 @@ def notify_with_checkbox(window: QWidget,
 
 def show_notification(window: QWidget,
                       title: str,
-                      text: str):
-    QMessageBox.information(window, 'Ошибка', text,
+                      text: str) -> None:
+    """
+    Показывает окно-уведомление с кнопкой "ОК"
+
+    Args:
+        window: Объект родительского окна.
+        title: Заголовок окна.
+        text: Текст уведомления.
+    """
+    QMessageBox.information(window, title, text,
                             defaultButton=QMessageBox.Ok)

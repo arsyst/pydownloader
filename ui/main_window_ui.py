@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QComboBox::down-arrow {\n"
-"    image: url(images/down_arrow.svg);\n"
+"    image: url(resources/down_arrow.svg);\n"
 "}\n"
 "\n"
 "QPushButton {\n"
@@ -140,7 +140,7 @@ class Ui_MainWindow(object):
         self.app_name_label.setGeometry(QtCore.QRect(50, 34, 321, 51))
         self.app_name_label.setStyleSheet("font-weight: 600;\n"
 "font-size: 16pt;\n"
-"font-family: Kontor, Nunito, sans-serif;\n"
+"font-family: Nunito, sans-serif;\n"
 "color: #000;")
         self.app_name_label.setObjectName("app_name_label")
         self.videos_table_widget_label = QtWidgets.QLabel(self.centralwidget)

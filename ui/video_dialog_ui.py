@@ -60,7 +60,7 @@ class Ui_VideoDialog(object):
 "}\n"
 "\n"
 "QComboBox::down-arrow {\n"
-"    image: url(images/down_arrow.svg);\n"
+"    image: url(resources/down_arrow.svg);\n"
 "}\n"
 "\n"
 "QPushButton {\n"

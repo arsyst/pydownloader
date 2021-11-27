@@ -185,7 +185,7 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    image: url(images/down_arrow.svg);
+    image: url(resources/down_arrow.svg);
 }
 
 QPushButton {
@@ -215,7 +215,7 @@ QPushButton:pressed {
     <property name="styleSheet">
      <string notr="true">font-weight: 600;
 font-size: 16pt;
-font-family: Kontor, Nunito, sans-serif;
+font-family: Nunito, sans-serif;
 color: #000;</string>
     </property>
     <property name="text">

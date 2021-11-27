@@ -1,6 +1,3 @@
-from youtube_dl.utils import DownloadError
-from requests.exceptions import Timeout, TooManyRedirects, ConnectionError, HTTPError
-
 __all__ = ('IncorrectLinkError',
            'InternetConnectionError',
            'OtherError')

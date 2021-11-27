@@ -3,7 +3,7 @@
 from logging import Logger
 from typing import Union, Callable, Optional
 import os
-# from pprint import pprint
+from pprint import pprint
 
 import requests
 from youtube_dl import YoutubeDL
@@ -86,40 +86,64 @@ class Youtube(Downloader):
                  file_name: str = s.OUTPUT_FILE_TEMPLATE,
                  download_format: Union[int, str] = 'bestaudio+bestvideo/best') -> None:
 
-        self._logger.info(f'DL({self.url}): starting video downloading')
-
-        if path is not None:
-            path = '\\'.join(path.split('\\') + [file_name])
+        self._logger.info(f'DL({self.url}): starting video downloading (format: {download_format})')
 
         format_name = {v: k for k, v in self.get_formats_dict().items()}[download_format]
+
+        if path is not None:
+            path = '/'.join(path.split('/') + [file_name])
+
+        self._logger.debug(f'DL({self.url}): downloading format-path: {path}')
+
+        format_dict = self._formats[format_name]
+        format_dict.update(self._video_info)
+        format_dict['extractor'] = self.__class__.__name__
+
+        path = path.format(**format_dict)
+
+        file_suffix = ''
+        file_index = 0
+
+        while os.path.isfile(f'{path}{file_suffix}.mp4'):  # если файл существует - добавить индекс к названию файла
+            file_index += 1
+            file_suffix = f'({file_index})'  # например: youtube-название_видео(индекс)
+
+        path += file_suffix
+
+        self._logger.info(f'Downloading file: {path}')
 
         def hook(d: dict):
             if d['status'] not in ('downloading', 'finished'):
                 on_progress(0, 0, 'error')
                 return
 
-            if not (total_bytes := d.get('total_bytes')):
-                total_bytes = d.get('total_bytes_estimate', 0)
+            if not (total_bytes := self.get_total_bytes(format_name)):
+                if not (total_bytes := d.get('total_bytes')):
+                    total_bytes = d.get('total_bytes_estimate')
 
             downloaded_bytes = d.get('downloaded_bytes', 0)
 
             if d['status'] == 'finished':
-                hook.last_bytes = downloaded_bytes if total_bytes is None else total_bytes
+                hook.last_bytes = downloaded_bytes
                 return
             elif hook.last_bytes > downloaded_bytes:
                 hook.plus_bytes = hook.last_bytes
                 hook.last_bytes = 0
 
-            on_progress(self.get_total_bytes(format_name), downloaded_bytes + hook.plus_bytes, d['status'])
+            # print(f'st: {d["status"]}, downloaded: {human_size(d["downloaded_bytes"])}, total: '
+            #       f'{human_size(d["total_bytes"])}, hookplus: {human_size(hook.plus_bytes)}')
+
+            on_progress(total_bytes, downloaded_bytes + hook.plus_bytes, d['status'])
 
         hook.last_bytes = 0
         hook.plus_bytes = 0
 
         opts = {
-            'format': download_format,
+            'format': str(download_format),
             'outtmpl': path,
             'progress_hooks': [hook],
-            'logger': self._ydl_logger
+            'logger': self._ydl_logger,
+            'recode_video': 'mp4',
         }
 
         if download_format != self._formats.get(s.AUDIO_FORMAT_PROPERTIES_STRING,
@@ -139,12 +163,12 @@ class Youtube(Downloader):
 
         if audio_format:
             formats_to_return = {}
-            for fs, f in self._formats.items():
-                if fs != s.AUDIO_FORMAT_PROPERTIES_STRING:
+            for fn, f in self._formats.items():
+                if fn != s.AUDIO_FORMAT_PROPERTIES_STRING:
                     if is_only_video_format(f):
-                        formats_to_return[fs] = f['format_id']
+                        formats_to_return[fn] = f"{f['format_id']}+{audio_format['format_id']}"
                     else:
-                        formats_to_return[fs] = f"{f['format_id']}+{audio_format['format_id']}"
+                        formats_to_return[fn] = f['format_id']
 
             formats_to_return[s.AUDIO_FORMAT_PROPERTIES_STRING] = audio_format['format_id']
 
@@ -216,9 +240,11 @@ class Youtube(Downloader):
 
         return thumbnail_filename
 
-    def get_total_bytes(self,
-                        format_name: str) -> Optional[int]:
-        return self._formats[format_name]['filesize']
+    def get_total_bytes(self, format_name: str) -> Optional[int]:
+        try:
+            return self._formats[format_name]['filesize']
+        except KeyError:
+            return None
 
     def _extract_formats(self) -> None:
         """
@@ -242,9 +268,9 @@ class Youtube(Downloader):
                                     key=lambda x: x['abr'])
             self._formats[s.AUDIO_FORMAT_PROPERTIES_STRING] = best_audio_format
 
+        pprint(filtered_video_formats)
         for f in filtered_video_formats:
-            if not is_only_video_format(f) and audio_formats:
-                print(f['filesize'], best_audio_format['filesize'])
+            if is_only_video_format(f) and audio_formats:
                 f['filesize'] += best_audio_format['filesize']
             self._formats[s.FORMAT_PROPTIES_FPS_TEMPLATE.format(**f)] = f
 

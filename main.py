@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 import sys
 import logging
@@ -26,6 +26,8 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     app.setAttribute(QtCore.Qt.AA_DisableWindowContextHelpButton)
+
+    QtGui.QFontDatabase.addApplicationFont("resources/Nunito-SemiBold.ttf")
 
     main_window = MainAppWindow()
     main_window.show()
