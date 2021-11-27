@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VideoDownloadDialog</class>
+ <widget class="QDialog" name="VideoDownloadDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>662</width>
+    <height>337</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">* {background: rgb(248, 248, 249);}
+
+QLabel {
+	color: #121212;
+	font-size: 16px;
+}
+
+QPushButton,
+QProgressBar {
+	border-color: #d9dadb;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #121212;
+	background: #fff;
+}
+
+QProgressBar {text-align: center;}
+
+QPushButton {
+	padding: 3px 7px
+}
+
+QPushButton:disabled {
+	color: #2d2d2f;
+	background: #d9d9da;
+	border-color: #c3c5c6;
+}
+
+QPushButton:pressed {
+	background: #f4f4f5;
+}</string>
+  </property>
+  <widget class="QProgressBar" name="progress_bar">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>235</y>
+     <width>601</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pause_button">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>280</y>
+     <width>141</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Приостановить</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="stop_button">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>280</y>
+     <width>131</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #fff;
+background: rgb(233, 81, 68);
+border-color: rgb(179, 59, 39);</string>
+   </property>
+   <property name="text">
+    <string>Завершить</string>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="now_downloads_label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>24</y>
+     <width>151</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Сейчас скачивается:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="thumbnail_label">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>60</y>
+     <width>231</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="video_title_label">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>60</y>
+     <width>331</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size: 18px;
+font-family: Roboto, Arial, sans-serif;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="decorative_label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>601</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-color: #d9dadb;
+border-style: solid;
+border-width: 1px;
+border-radius: 5px;
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="status_label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>208</y>
+     <width>601</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Подготовка к скачиванию...</string>
+   </property>
+  </widget>
+  <zorder>decorative_label</zorder>
+  <zorder>progress_bar</zorder>
+  <zorder>pause_button</zorder>
+  <zorder>stop_button</zorder>
+  <zorder>now_downloads_label</zorder>
+  <zorder>thumbnail_label</zorder>
+  <zorder>video_title_label</zorder>
+  <zorder>status_label</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,3 @@
+Список функций, которые можно добавить в будущем:
+
+TODO: add the opportunity to adding account information
